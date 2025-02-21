@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import * as mongoose from 'mongoose';
 
-export const ListSchema = new mongoose.Schema({
+export const ActivitySchema = new mongoose.Schema({
     title: String,
     description: String,
     status: Boolean,
