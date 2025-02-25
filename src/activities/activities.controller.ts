@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { ActivitiesService } from './activities.service';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { UpdateActivityDto } from './dto/update-activity.dto';
+import { title } from 'process';
 
 @Controller('activities')
 export class ActivitiesController {
@@ -10,7 +11,21 @@ export class ActivitiesController {
 
     @Post()
     async create(@Body() createActivityDto: CreateActivityDto) {
-        return this.activitiesService.create(createActivityDto)
+        console.log(createActivityDto);
+
+        const activity: CreateActivityDto = {
+            title: createActivityDto.title,
+            description: createActivityDto.description,
+            complete: false,
+            updated_at: new Date(),
+            created_at: new Date(),
+        }
+
+        await this.activitiesService.create(activity)
+        return {
+            ok: true,
+            message: 'Actividad Creada Correctamente'
+        } 
     }
 
     @Get()
@@ -23,14 +38,34 @@ export class ActivitiesController {
         return this.activitiesService.getById(id)
     }
 
-    @Put()
+    @Put(':id')
     async update(@Param('id') id : string, @Body() updateActivityDto: UpdateActivityDto) {
-        return this.activitiesService.update(id, updateActivityDto)
+
+        const activity: UpdateActivityDto = {
+            title: updateActivityDto.title,
+            description: updateActivityDto.description,
+            complete: updateActivityDto.complete,
+            updated_at: new Date(),
+            created_at: updateActivityDto.created_at
+        }
+
+        await this.activitiesService.update(id, activity)
+        return {
+            ok: true,
+            message: 'Actividad Modificada Correctamente'
+        } 
+
+        // return this.activitiesService.update(id, updateActivityDto)
     }
 
     @Delete(':id')
     async delete(@Param('id') id: string) {
-        return this.activitiesService.delete(id)
+
+        await this.activitiesService.delete(id)
+        return {
+            ok: true,
+            message: 'Actividad Eliminada Correctamente'
+        } 
     }
 
 }

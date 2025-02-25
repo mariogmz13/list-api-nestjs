@@ -4,7 +4,7 @@ import * as mongoose from 'mongoose';
 export const ActivitySchema = new mongoose.Schema({
     title: String,
     description: String,
-    status: Boolean,
+    complete: Boolean,
     created_at: Date,
     updated_at: Date,
 })

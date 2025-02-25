@@ -1,7 +1,22 @@
+import { IsBoolean, IsDate, IsNotEmpty, IsOptional } from "class-validator";
+
 export class UpdateActivityDto {
+    
+    @IsNotEmpty({ message: 'El campo titulo no puede estar vacio' })
     title: string;
-    description?: string;
-    status: boolean;
-    created_at?: Date;
+
+    @IsOptional()
+    description: string;
+
+    @IsBoolean({ message: 'El campo completado debería de ser una afirmación' })
+    @IsOptional()
+    complete: boolean;
+
+    @IsDate()
+    @IsOptional()
+    created_at: Date;
+
+    @IsDate()
+    @IsOptional()
     updated_at: Date;
 }
