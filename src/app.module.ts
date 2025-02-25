@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ActivitiesModule } from './activities/activities.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -12,7 +13,8 @@ import { MongooseModule } from '@nestjs/mongoose';
       // useNewUrlParser: true,
       // useUnifiedTopology: true,
     }),
-    ActivitiesModule
+    ActivitiesModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
