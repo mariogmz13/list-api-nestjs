@@ -5,16 +5,22 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthService } from './auth.service';
 import { jwtConstants } from './constants';
+import { AuthController } from './auth.controller';
+import { MongooseModule } from '@nestjs/mongoose';
+import { AuthSchema } from './schemas/auth.schema';
+import { HashService } from './hash.service';
 
 @Module({
   imports: [
+    MongooseModule.forFeature([{ name: 'Auth', schema: AuthSchema }]),
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '60s' },
     }),
   ],
-  providers: [AuthService, JwtStrategy],
-  exports: [AuthService], // Exporta el servicio si lo necesitas en otros módulos
+  providers: [AuthService, JwtStrategy, HashService],
+  exports: [AuthService],
+  controllers: [AuthController], // Exporta el servicio si lo necesitas en otros módulos
 })
 export class AuthModule {}
