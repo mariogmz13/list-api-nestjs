@@ -21,7 +21,7 @@ export class UsersService {
                 sub: user._id, email: user.email 
               }
             )
-            newUser.save();
+            await newUser.save();
             return token
           }
 
