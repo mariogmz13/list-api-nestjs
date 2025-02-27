@@ -1,5 +1,5 @@
 // auth/auth.service.ts
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotAcceptableException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { HashService } from './hash.service';
@@ -10,7 +10,7 @@ import { Auth } from './entities/auth.entity';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel('Auth') private authModel: Model<Auth>,
+    @InjectModel('User') private authModel: Model<Auth>,
     private jwtService: JwtService,
     // private usersService: UsersService,
     private hashService: HashService,
@@ -33,14 +33,22 @@ export class AuthService {
   async validateUser(email: string, pass: string): Promise<any> {
     // const user = await this.usersService.encontrarPorEmail(email);
     const user = await this.authModel.findOne({ email })
-    console.log(user);
+    // console.log(user);
     if (!user) {
       throw new NotFoundException(`El usuario no existe`);
     }
-    
-    if (user && (await this.hashService.comparePasswords(pass, user.password))) {
+    const passwordCorrect = await this.hashService.comparePasswords(pass, user.password)
+    console.log(passwordCorrect);
+    if (user && (passwordCorrect)) {
       const { password, ...result } = user;
-      return result;
+      const payload = { sub: user.id, email: user.email }
+      const token = await this.generateToken(payload)
+      return {
+        ok: true,
+        token: token
+      };
+    }else if(passwordCorrect == false){
+      throw new UnauthorizedException('Contrasena incorrecta')
     }
     return null;
   }

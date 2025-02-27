@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
 
@@ -12,7 +12,7 @@ export class AuthController {
     ) { }
 
 
-    @Get('login')
+    @Post('login')
     async login(@Body() login: LoginUserDto) {
         return this.authService.validateUser(login.email, login.password)
 
@@ -26,10 +26,10 @@ export class AuthController {
     }
     
 
-    @Get(':id')
-    async getByID(@Param('id') id: string) {
-        return this.authService.getById(id)
-    }
+    // @Get(':id')
+    // async getByID(@Param('id') id: string) {
+    //     return this.authService.getById(id)
+    // }
 
 
 }

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './entities/user.entity';
@@ -9,7 +9,7 @@ export class UsersService {
 
     constructor(
             @InjectModel('User') private userModel: Model<User>,
-            // private hashService: HashService
+            private hashService: HashService
           ) {}
         
           async create(user: User): Promise<User> {
@@ -79,6 +79,24 @@ export class UsersService {
           //   }
           //   return null;
           // }
+
+          // async validateUser(email: string, pass: string): Promise<any> {
+          //     // const user = await this.usersService.encontrarPorEmail(email);
+          //     const user = await this.userModel.findOne({ email })
+          //     // console.log(user);
+          //     if (!user) {
+          //       throw new NotFoundException(`El usuario no existe`);
+          //     }
+          //     const passwordCorrect = await this.hashService.comparePasswords(pass, user.password)
+          //     console.log(passwordCorrect);
+          //     if (user && (passwordCorrect)) {
+          //       const { password, ...result } = user;
+          //       return result;
+          //     }else if(passwordCorrect == false){
+          //       throw new UnauthorizedException('Contrasena incorrecta')
+          //     }
+          //     return null;
+          //   }
     
 
 }

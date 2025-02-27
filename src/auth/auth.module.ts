@@ -12,7 +12,7 @@ import { HashService } from './hash.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'Auth', schema: AuthSchema }]),
+    MongooseModule.forFeature([{ name: 'User', schema: AuthSchema }]),
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,

@@ -32,12 +32,18 @@ export class ActivitiesController {
 
     @Get()
     async getAll() {
-        return this.activitiesService.getAll()
+        return {
+            ok: true,
+            data: this.activitiesService.getAll()
+        }
     }
 
     @Get(':id')
-    async getByID(@Param('id') id: string) {
-        return this.activitiesService.getById(id)
+    async getByID(@Param('id') id: string) { 
+        return {
+            ok: true,
+            data: this.activitiesService.getById(id)
+        }
     }
 
     @Put(':id')
