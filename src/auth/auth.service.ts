@@ -40,8 +40,12 @@ export class AuthService {
     console.log(passwordCorrect);
     if (user && (passwordCorrect)) {
       const { password, ...result } = user;
-      const payload = { sub: user.id, email: user.email }
-      const token = await this.generateToken(payload)
+      // const payload = { sub: user.id, email: user.email }
+      const token = await this.generateToken(
+        { 
+          sub: user.id, 
+          email: user.email }
+      )
       return token
 
     }else if(passwordCorrect == false){
