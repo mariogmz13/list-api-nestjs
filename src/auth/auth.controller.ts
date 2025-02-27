@@ -19,7 +19,7 @@ export class AuthController {
         return {
             ok: true,
             message: "Usuario validado correctamente",
-            token: token
+            data: token
         };
         } catch (error) {
             return {
