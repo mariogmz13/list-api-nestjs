@@ -14,8 +14,20 @@ export class AuthController {
 
     @Post('login')
     async login(@Body() login: LoginUserDto) {
-        return this.authService.validateUser(login.email, login.password)
-
+        try {
+            const token = await this.authService.validateUser(login.email, login.password)
+        return {
+            ok: true,
+            message: "Usuario validado correctamente",
+            token: token
+        };
+        } catch (error) {
+            return {
+                ok: false,
+                message: error
+            }
+        }
+        
         // const user: CreateUserDto = {
         //                 username: createUserDto.username,
         //                 email: createUserDto.email,

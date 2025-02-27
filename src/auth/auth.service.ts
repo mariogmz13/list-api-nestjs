@@ -17,9 +17,8 @@ export class AuthService {
   ) { }
 
   async generateToken(payload: any) {
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
+    const token = await this.jwtService.signAsync(payload)
+    return token
   }
 
   async getById(id: string): Promise<Auth | null> {
@@ -43,10 +42,8 @@ export class AuthService {
       const { password, ...result } = user;
       const payload = { sub: user.id, email: user.email }
       const token = await this.generateToken(payload)
-      return {
-        ok: true,
-        token: token
-      };
+      return token
+
     }else if(passwordCorrect == false){
       throw new UnauthorizedException('Contrasena incorrecta')
     }

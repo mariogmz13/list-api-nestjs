@@ -17,36 +17,72 @@ export class UsersController {
     async create(@Body() createUserDto: CreateUserDto) {
         console.log(createUserDto);
 
-        if (await this.usersService.checkEmail(createUserDto.email)){
-            return {
-                ok: false,
-                message: 'El email ya está registrado'
+        try {
+            if (await this.usersService.checkEmail(createUserDto.email)){
+                return {
+                    ok: false,
+                    message: 'El email ya está registrado'
+                }
             }
-        }
+    
+            const user: CreateUserDto = {
+                username: createUserDto.username,
+                email: createUserDto.email,
+                password: await this.hashService.hashPassword(createUserDto.password),
+                updated_at: new Date(),
+                created_at: new Date(),
+            }
+    
+            const data = await this.usersService.create(user)
+            return {
+                ok: true,
+                data: data,
+                message: 'Usuario Creado Correctamente'
+            }
 
-        const user: CreateUserDto = {
-            username: createUserDto.username,
-            email: createUserDto.email,
-            password: await this.hashService.hashPassword(createUserDto.password),
-            updated_at: new Date(),
-            created_at: new Date(),
-        }
-
-        await this.usersService.create(user)
-        return {
-            ok: true,
-            message: 'Usuario Creado Correctamente'
+        } catch (error) {
+            return{
+                ok: false,
+                message: error
+            }
         }
     }
 
     @Get()
     async getAll() {
-        return this.usersService.getAll()
+        try {
+            const data = await this.usersService.getAll();
+
+            return {
+                ok: true,
+                data: data
+            }
+            
+        } catch (error) {
+            return {
+                ok: false,
+                message: error
+            }
+        }
+        
     }
 
     @Get(':id')
     async getByID(@Param('id') id: string) {
-        return this.usersService.getById(id)
+        try {
+            const data = this.usersService.getById(id)
+            
+            return {
+                ok: true,
+                data: data
+            }
+
+        } catch (error) {
+            return {
+                ok: false,
+                message: error
+            }
+        }
     }
 
     // @Get('finde/:email')
@@ -61,21 +97,29 @@ export class UsersController {
 
     @Put(':id')
     async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-
-        const user: UpdateUserDto = {
-
-            username: updateUserDto.username,
-            email: updateUserDto.email,
-            password: await this.hashService.hashPassword(updateUserDto.password),
-            updated_at: new Date(),
-            created_at: updateUserDto.created_at
+        
+        try {
+            const user: UpdateUserDto = {
+                username: updateUserDto.username,
+                email: updateUserDto.email,
+                password: await this.hashService.hashPassword(updateUserDto.password),
+                updated_at: new Date(),
+                created_at: updateUserDto.created_at
+            }
+    
+            await this.usersService.update(id, user)
+            return {
+                ok: true,
+                message: 'Usuario Modificado Correctamente'
+            }
+            
+        } catch (error) {
+            return {
+                ok: false,
+                message: error
+            }
         }
-
-        await this.usersService.update(id, user)
-        return {
-            ok: true,
-            message: 'Usuario Modificado Correctamente'
-        }
+        
 
         // return this.usersService.update(id, updateActivityDto)
     }
@@ -83,11 +127,20 @@ export class UsersController {
     @Delete(':id')
     async delete(@Param('id') id: string) {
 
-        await this.usersService.delete(id)
-        return {
-            ok: true,
-            message: 'Usuario Eliminado Correctamente'
+        try {
+            await this.usersService.delete(id)
+            return {
+                ok: true,
+                message: 'Usuario Eliminado Correctamente'
+            }
+            
+        } catch (error) {
+            return {
+                ok: false,
+                message: error
+            }
         }
+
     }
 
 }

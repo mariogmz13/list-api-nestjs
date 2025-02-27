@@ -9,59 +9,93 @@ import { AuthGuard } from '@nestjs/passport';
 @Controller('activities')
 export class ActivitiesController {
 
-    constructor(private readonly activitiesService: ActivitiesService) {}
+    constructor(private readonly activitiesService: ActivitiesService) { }
 
     @Post()
     async create(@Body() createActivityDto: CreateActivityDto) {
         console.log(createActivityDto);
 
-        const activity: CreateActivityDto = {
-            title: createActivityDto.title,
-            description: createActivityDto.description,
-            complete: false,
-            updated_at: new Date(),
-            created_at: new Date(),
+        try {
+            const activity: CreateActivityDto = {
+                title: createActivityDto.title,
+                description: createActivityDto.description,
+                complete: false,
+                updated_at: new Date(),
+                created_at: new Date(),
+            }
+
+            await this.activitiesService.create(activity)
+            return {
+                ok: true,
+                message: 'Actividad Creada Correctamente'
+            }
+        } catch (error) {
+            return {
+                ok: false,
+                message: error
+            }
         }
 
-        await this.activitiesService.create(activity)
-        return {
-            ok: true,
-            message: 'Actividad Creada Correctamente'
-        } 
     }
 
     @Get()
     async getAll() {
-        return {
-            ok: true,
-            data: this.activitiesService.getAll()
+        
+        try {
+            return {
+                ok: true,
+                data: this.activitiesService.getAll()
+            }
+
+        } catch (error) {
+            return {
+                ok: false,
+                message: error
+            }
         }
     }
 
     @Get(':id')
-    async getByID(@Param('id') id: string) { 
-        return {
-            ok: true,
-            data: this.activitiesService.getById(id)
+    async getByID(@Param('id') id: string) {
+
+        try {
+            return {
+                ok: true,
+                data: this.activitiesService.getById(id)
+            }
+
+        } catch (error) {
+            return {
+                ok: false,
+                message: error
+            }
         }
     }
 
     @Put(':id')
-    async update(@Param('id') id : string, @Body() updateActivityDto: UpdateActivityDto) {
+    async update(@Param('id') id: string, @Body() updateActivityDto: UpdateActivityDto) {
 
-        const activity: UpdateActivityDto = {
-            title: updateActivityDto.title,
-            description: updateActivityDto.description,
-            complete: updateActivityDto.complete,
-            updated_at: new Date(),
-            created_at: updateActivityDto.created_at
+        try {
+            const activity: UpdateActivityDto = {
+                title: updateActivityDto.title,
+                description: updateActivityDto.description,
+                complete: updateActivityDto.complete,
+                updated_at: new Date(),
+                created_at: updateActivityDto.created_at
+            }
+            await this.activitiesService.update(id, activity)
+
+            return {
+                ok: true,
+                message: 'Actividad Modificada Correctamente'
+            }
+
+        } catch (error) {
+            return {
+                ok: false,
+                message: error
+            }
         }
-
-        await this.activitiesService.update(id, activity)
-        return {
-            ok: true,
-            message: 'Actividad Modificada Correctamente'
-        } 
 
         // return this.activitiesService.update(id, updateActivityDto)
     }
@@ -69,11 +103,21 @@ export class ActivitiesController {
     @Delete(':id')
     async delete(@Param('id') id: string) {
 
-        await this.activitiesService.delete(id)
-        return {
-            ok: true,
-            message: 'Actividad Eliminada Correctamente'
-        } 
+        try {
+            await this.activitiesService.delete(id)
+            return {
+                ok: true,
+                message: 'Actividad Eliminada Correctamente'
+            }
+
+        } catch (error) {
+            return {
+                ok: false,
+                message: error
+            }
+
+        }
+
     }
 
 }
