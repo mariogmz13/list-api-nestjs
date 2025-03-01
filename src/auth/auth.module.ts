@@ -9,6 +9,7 @@ import { AuthController } from './auth.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthSchema } from './schemas/auth.schema';
 import { HashService } from './hash.service';
+import { UsersService } from 'src/users/users.service';
 
 @Module({
   imports: [
@@ -19,8 +20,8 @@ import { HashService } from './hash.service';
       signOptions: { expiresIn: '60s' },
     }),
   ],
-  providers: [AuthService, JwtStrategy, HashService],
+  providers: [AuthService, JwtStrategy, HashService, UsersService],
   exports: [AuthService],
-  controllers: [AuthController], // Exporta el servicio si lo necesitas en otros módulos
+  controllers: [AuthController],
 })
 export class AuthModule {}

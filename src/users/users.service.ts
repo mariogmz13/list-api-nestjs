@@ -2,27 +2,17 @@ import { BadRequestException, Injectable, NotFoundException, UnauthorizedExcepti
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './entities/user.entity';
-import { HashService } from 'src/auth/hash.service';
-import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class UsersService {
 
     constructor(
             @InjectModel('User') private userModel: Model<User>,
-            // private hashService: HashService
-            private authService: AuthService
           ) {}
         
           async create(user: User): Promise<any> {
             const newUser = new this.userModel(user);
-            const token = this.authService.generateToken(
-              {
-                sub: user._id, email: user.email 
-              }
-            )
-            await newUser.save();
-            return token
+            return await newUser.save();
           }
 
           async checkEmail(email: String): Promise<User>{
@@ -77,34 +67,5 @@ export class UsersService {
             }
             return result
           }
-
-          // async validateUser(username: string, pass: string): Promise<any> {
-          //   // const user = await this.usersService.encontrarPorEmail(email);
-          //   const user = await this.userModel.findOne({ username }).exec();
-          //   if (user && (await this.hashService.comparePasswords(pass, user.password))) {
-          //     const { password, ...result } = user;
-          //     return result;
-          //   }
-          //   return null;
-          // }
-
-          // async validateUser(email: string, pass: string): Promise<any> {
-          //     // const user = await this.usersService.encontrarPorEmail(email);
-          //     const user = await this.userModel.findOne({ email })
-          //     // console.log(user);
-          //     if (!user) {
-          //       throw new NotFoundException(`El usuario no existe`);
-          //     }
-          //     const passwordCorrect = await this.hashService.comparePasswords(pass, user.password)
-          //     console.log(passwordCorrect);
-          //     if (user && (passwordCorrect)) {
-          //       const { password, ...result } = user;
-          //       return result;
-          //     }else if(passwordCorrect == false){
-          //       throw new UnauthorizedException('Contrasena incorrecta')
-          //     }
-          //     return null;
-          //   }
-    
 
 }

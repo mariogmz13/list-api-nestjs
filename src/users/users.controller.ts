@@ -32,11 +32,11 @@ export class UsersController {
                 updated_at: new Date(),
                 created_at: new Date(),
             }
-    
+            console.log(user);
             const data = await this.usersService.create(user)
             return {
                 ok: true,
-                data: data,
+                token: data,
                 message: 'Usuario Creado Correctamente'
             }
 
