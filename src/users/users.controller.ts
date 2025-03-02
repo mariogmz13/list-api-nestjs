@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { HashService } from 'src/auth/hash.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
@@ -48,6 +49,7 @@ export class UsersController {
         }
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Get()
     async getAll() {
         try {
@@ -67,6 +69,7 @@ export class UsersController {
         
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Get(':id')
     async getByID(@Param('id') id: string) {
         try {
@@ -95,6 +98,7 @@ export class UsersController {
     //     return this.usersService.getByUsername(username)
     // }
 
+    @UseGuards(AuthGuard('jwt'))
     @Put(':id')
     async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
         
@@ -124,6 +128,7 @@ export class UsersController {
         // return this.usersService.update(id, updateActivityDto)
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Delete(':id')
     async delete(@Param('id') id: string) {
 
