@@ -40,11 +40,11 @@ export class ActivitiesController {
 
     @Get()
     async getAll() {
-        
         try {
+            const data = await this.activitiesService.getAll()
             return {
                 ok: true,
-                data: this.activitiesService.getAll()
+                data: data
             }
 
         } catch (error) {
@@ -58,10 +58,12 @@ export class ActivitiesController {
     @Get(':id')
     async getByID(@Param('id') id: string) {
 
-        try {
+        try { 
+            const data = await this.activitiesService.getById(id);
+            
             return {
                 ok: true,
-                data: this.activitiesService.getById(id)
+                data: data
             }
 
         } catch (error) {
@@ -74,15 +76,16 @@ export class ActivitiesController {
 
     @Put(':id')
     async update(@Param('id') id: string, @Body() updateActivityDto: UpdateActivityDto) {
-
+        const complete: boolean = updateActivityDto.complete
         try {
             const activity: UpdateActivityDto = {
                 title: updateActivityDto.title,
                 description: updateActivityDto.description,
-                complete: updateActivityDto.complete,
+                complete: complete,
                 updated_at: new Date(),
                 created_at: updateActivityDto.created_at
             }
+            console.log(activity);
             await this.activitiesService.update(id, activity)
 
             return {
