@@ -10,7 +10,7 @@ import { UsersModule } from './users/users.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot('mongodb+srv://mariogamez1999:qgQ4jOCsodbLoVLq@cluster0.f5mtmcf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+    MongooseModule.forRoot(process.env.MONGODB_URI, {
       // useNewUrlParser: true,
       // useUnifiedTopology: true,
     }),
